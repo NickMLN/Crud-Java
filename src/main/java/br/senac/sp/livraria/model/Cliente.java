@@ -1,4 +1,4 @@
-package br.senac.sp.model;
+package br.senac.sp.livraria.model;
 
 import br.senac.sp.livraria.enumeration.Escolaridade;
 import br.senac.sp.livraria.enumeration.EstadoCivil;
