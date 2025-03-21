@@ -7,6 +7,7 @@ import java.util.Calendar;
 
 public class Cliente {
     private int id;
+    private String nome;
     private String cpf;
     private Calendar nascimento;
     private String telefone;
@@ -21,6 +22,14 @@ public class Cliente {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getCpf() {
