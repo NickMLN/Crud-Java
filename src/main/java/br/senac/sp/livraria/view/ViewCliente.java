@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.*;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -11,6 +13,9 @@ import java.util.Calendar;
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 
+import br.senac.sp.livraria.dao.ClienteDao;
+import br.senac.sp.livraria.dao.ConnectionFactory;
+import br.senac.sp.livraria.dao.InterfaceDao;
 import br.senac.sp.livraria.enumeration.Escolaridade;
 import br.senac.sp.livraria.enumeration.EstadoCivil;
 import br.senac.sp.livraria.model.Cliente;
@@ -26,12 +31,21 @@ public class ViewCliente extends JFrame implements ActionListener {
     JComboBox<EstadoCivil> cbEstadoCivil;
     JButton btSalvar;
     Cliente cliente;
+    Connection conexao;
+    InterfaceDao<Cliente> daoCliente;
 
     public static void main(String[] args) {
         new ViewCliente();
     }
 
     public ViewCliente() {
+        try {
+            conexao = ConnectionFactory.getConexao();
+            daoCliente = new ClienteDao(conexao);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
         initComponents();
         actions();
     }
@@ -140,7 +154,7 @@ public class ViewCliente extends JFrame implements ActionListener {
 
         //taEndereco
         taEndereco = new JTextArea();
-        taEndereco.setBounds(350, 90, 280, 25);
+        taEndereco.setBounds(350, 90, 280, 30);
         taEndereco.setFont(fontePadrao);
 
         //btSalvar
@@ -231,6 +245,12 @@ public class ViewCliente extends JFrame implements ActionListener {
                 cliente.setEscolaridade((Escolaridade) cbEscolaridade.getSelectedItem());
                 cliente.setEstadoCivil((EstadoCivil) cbEstadoCivil.getSelectedItem());
                 cliente.setEndereco(taEndereco.getText());
+            }
+            //inserir no banco
+            try {
+                daoCliente.inserir(cliente);
+            } catch (SQLException e1) {
+                JOptionPane.showMessageDialog(ViewCliente.this, "Erro ao Inserir" +  e1.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
             }
         });
 
