@@ -20,7 +20,8 @@ public class ClienteDao implements InterfaceDao<Cliente> {
 
     @Override
     public void inserir(Cliente objeto) throws SQLException {
-        sql = "insert into cliente(nome, cpf, nascimento, telefone, email, endereco, escolaridade, estadoCivil) values(?,?,?,?,?,?,?,?)";
+        sql = "insert into cliente(nome, cpf, nascimento, telefone, email, endereco, escolaridade, estadocivil)"
+                + " values(?,?,?,?,?,?,?,?)";
         stmt = conexao.prepareStatement(sql);
         stmt.setString(1, objeto.getNome());
         stmt.setString(2, objeto.getCpf());
@@ -36,7 +37,8 @@ public class ClienteDao implements InterfaceDao<Cliente> {
 
     @Override
     public void alterar(Cliente objeto) throws SQLException {
-        sql = "update cliente set nome = ?, cpf = ?, nascimento = ?, telefone = ?, email = ?, endereco = ?, escolaridade = ?, estadoCivil = ? where id = ?),";
+        sql = "update cliente set nome = ?, cpf = ?, nascimento = ?, telefone = ?, email = ?, "
+                + "endereco = ?, escolaridade = ?, estadocivil = ? where id = ?";
         stmt = conexao.prepareStatement(sql);
         stmt.setString(1, objeto.getNome());
         stmt.setString(2, objeto.getCpf());
@@ -62,20 +64,22 @@ public class ClienteDao implements InterfaceDao<Cliente> {
 
     @Override
     public List<Cliente> listar() throws SQLException {
-        sql = "select * from cliente order by nome";
+        sql = "select * from cliente order by id";
         stmt = conexao.prepareStatement(sql);
         List<Cliente> clientes = new ArrayList<Cliente>();
         ResultSet rs = stmt.executeQuery();
-        while (rs.next()) {
+        while(rs.next()) {
             Cliente c = new Cliente();
             c.setId(rs.getInt("id"));
             c.setNome(rs.getString("nome"));
             c.setCpf(rs.getString("cpf"));
             c.setEmail(rs.getString("email"));
             c.setTelefone(rs.getString("telefone"));
-            c.setEndereco(rs.getString("endereço"));
-            c.setEscolaridade(Escolaridade.values()[rs.getInt("escolaridade")]);
-            c.setEstadoCivil(EstadoCivil.values()[rs.getInt("estadoCivil")]);
+            c.setEndereco(rs.getString("endereco"));
+            c.setEscolaridade
+                    (Escolaridade.values()[rs.getInt("escolaridade")]);
+            c.setEstadoCivil
+                    (EstadoCivil.values()[rs.getInt("estadocivil")]);
             Calendar nasc = Calendar.getInstance();
             nasc.setTimeInMillis(rs.getDate("nascimento").getTime());
             c.setNascimento(nasc);
@@ -85,4 +89,33 @@ public class ClienteDao implements InterfaceDao<Cliente> {
         stmt.close();
         return clientes;
     }
+
+    @Override
+    public Cliente buscar(int id) throws SQLException {
+        sql = "select * from cliente where id = ?";
+        stmt = conexao.prepareStatement(sql);
+        stmt.setInt(1, id);
+        Cliente cliente = null;
+        ResultSet rs = stmt.executeQuery();
+        if(rs.next()) {
+            cliente = new Cliente();
+            cliente.setId(rs.getInt("id"));
+            cliente.setNome(rs.getString("nome"));
+            cliente.setCpf(rs.getString("cpf"));
+            cliente.setEmail(rs.getString("email"));
+            cliente.setTelefone(rs.getString("telefone"));
+            cliente.setEndereco(rs.getString("endereco"));
+            cliente.setEscolaridade
+                    (Escolaridade.values()[rs.getInt("escolaridade")]);
+            cliente.setEstadoCivil
+                    (EstadoCivil.values()[rs.getInt("estadocivil")]);
+            Calendar nasc = Calendar.getInstance();
+            nasc.setTimeInMillis(rs.getDate("nascimento").getTime());
+            cliente.setNascimento(nasc);
+        }
+        rs.close();
+        stmt.close();
+        return cliente;
+    }
+
 }
