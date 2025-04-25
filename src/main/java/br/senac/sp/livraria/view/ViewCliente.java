@@ -12,7 +12,6 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.JTableHeader;
 import javax.swing.text.MaskFormatter;
 
 import br.senac.sp.livraria.dao.ClienteDao;
@@ -180,7 +179,7 @@ public class ViewCliente extends JFrame implements ActionListener {
 
         // btLimpar
         btLimpar = new JButton("Limpar");
-        btLimpar.setBounds(200,160,80,25);
+        btLimpar.setBounds(200, 160, 80, 25);
         btLimpar.setFont(fontePadrao);
 
         //modelClientes
