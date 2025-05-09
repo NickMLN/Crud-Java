@@ -14,9 +14,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.MaskFormatter;
 
-import br.senac.sp.livraria.dao.ClienteDao;
-import br.senac.sp.livraria.dao.ConnectionFactory;
-import br.senac.sp.livraria.dao.InterfaceDao;
+import br.senac.sp.livraria.dao.*;
 import br.senac.sp.livraria.enumeration.Escolaridade;
 import br.senac.sp.livraria.enumeration.EstadoCivil;
 import br.senac.sp.livraria.model.Cliente;
@@ -47,7 +45,7 @@ public class ViewCliente extends JFrame implements ActionListener {
     public ViewCliente() {
         try {
             conexao = ConnectionFactory.getConexao();
-            daoCliente = new ClienteDao(conexao);
+            daoCliente = new ClienteJpaDao(EMFactory.getEntityManager());
             clientes = daoCliente.listar();
 
         } catch (SQLException e) {
