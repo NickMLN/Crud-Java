@@ -44,7 +44,7 @@ public class ViewCliente extends JFrame implements ActionListener {
 
     public ViewCliente() {
         try {
-            conexao = ConnectionFactory.getConexao();
+//            conexao = ConnectionFactory.getConexao();
             daoCliente = new ClienteJpaDao(EMFactory.getEntityManager());
             clientes = daoCliente.listar();
 
